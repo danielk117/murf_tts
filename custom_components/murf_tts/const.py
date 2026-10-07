@@ -47,17 +47,27 @@ REGIONS: Final = [
 ]
 DEFAULT_REGION: Final = "global"
 
-MODELS: Final = ["FALCON", "GEN2"]
-DEFAULT_MODEL: Final = "FALCON"
+# Stored and shown in lower case, because Home Assistant only allows
+# [a-z0-9-_] as selector option keys. The API layer sends them upper case.
+MODELS: Final = ["falcon", "gen2"]
+DEFAULT_MODEL: Final = "falcon"
 
-# Murf format name -> file extension understood by Home Assistant
-AUDIO_FORMATS: Final = {
-    "MP3": "mp3",
-    "OGG": "ogg",
-    "WAV": "wav",
-    "FLAC": "flac",
-}
-DEFAULT_AUDIO_FORMAT: Final = "MP3"
+# The format value doubles as the file extension for Home Assistant.
+AUDIO_FORMATS: Final = ["mp3", "ogg", "wav", "flac"]
+DEFAULT_AUDIO_FORMAT: Final = "mp3"
+
+
+def normalize_model(value: str | None) -> str:
+    """Return the stored model in its canonical form (tolerates old upper case)."""
+    model = (value or DEFAULT_MODEL).lower()
+    return model if model in MODELS else DEFAULT_MODEL
+
+
+def normalize_audio_format(value: str | None) -> str:
+    """Return the stored audio format in its canonical form."""
+    audio_format = (value or DEFAULT_AUDIO_FORMAT).lower()
+    return audio_format if audio_format in AUDIO_FORMATS else DEFAULT_AUDIO_FORMAT
+
 
 RATE_MIN: Final = -50
 RATE_MAX: Final = 50

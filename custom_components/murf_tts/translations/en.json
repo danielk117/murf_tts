@@ -115,16 +115,16 @@
     },
     "model": {
       "options": {
-        "FALCON": "Falcon (low latency)",
-        "GEN2": "Gen2 (highest quality)"
+        "falcon": "Falcon (low latency)",
+        "gen2": "Gen2 (highest quality)"
       }
     },
     "audio_format": {
       "options": {
-        "MP3": "MP3",
-        "OGG": "OGG",
-        "WAV": "WAV",
-        "FLAC": "FLAC"
+        "mp3": "MP3",
+        "ogg": "OGG",
+        "wav": "WAV",
+        "flac": "FLAC"
       }
     }
   },

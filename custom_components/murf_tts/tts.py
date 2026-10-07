@@ -32,7 +32,6 @@ from .const import (
     ATTR_PITCH,
     ATTR_RATE,
     ATTR_STYLE,
-    AUDIO_FORMATS,
     CONF_AUDIO_FORMAT,
     CONF_LOCALE,
     CONF_MODEL,
@@ -40,8 +39,6 @@ from .const import (
     CONF_RATE,
     CONF_STYLE,
     CONF_VOICE_ID,
-    DEFAULT_AUDIO_FORMAT,
-    DEFAULT_MODEL,
     DOMAIN,
     LOGGER,
     PITCH_MAX,
@@ -49,6 +46,8 @@ from .const import (
     RATE_MAX,
     RATE_MIN,
     SUBENTRY_TYPE_TTS,
+    normalize_audio_format,
+    normalize_model,
 )
 
 PARALLEL_UPDATES = 0
@@ -82,13 +81,13 @@ class MurfTTSEntity(TextToSpeechEntity):
         self._entry = entry
         self._api = entry.runtime_data
         data = subentry.data
-        self._model: str = data.get(CONF_MODEL, DEFAULT_MODEL)
+        self._model: str = normalize_model(data.get(CONF_MODEL))
         self._voice_id: str = data[CONF_VOICE_ID]
         self._locale: str = data[CONF_LOCALE]
         self._style: str | None = data.get(CONF_STYLE)
         self._rate: int = int(data.get(CONF_RATE, 0))
         self._pitch: int = int(data.get(CONF_PITCH, 0))
-        self._format: str = data.get(CONF_AUDIO_FORMAT, DEFAULT_AUDIO_FORMAT)
+        self._format: str = normalize_audio_format(data.get(CONF_AUDIO_FORMAT))
 
         voice = self._voice(self._voice_id)
         if voice is None:
@@ -108,7 +107,7 @@ class MurfTTSEntity(TextToSpeechEntity):
             identifiers={(DOMAIN, subentry.subentry_id)},
             name=subentry.title,
             manufacturer="Murf AI",
-            model=f"{voice.name if voice else self._voice_id} · {self._model}",
+            model=f"{voice.name if voice else self._voice_id} · {self._model.capitalize()}",
             entry_type=DeviceEntryType.SERVICE,
         )
 
@@ -254,7 +253,7 @@ class MurfTTSEntity(TextToSpeechEntity):
         message = "".join([chunk async for chunk in request.message_gen])
         stream = await self._async_open(message, request.language, request.options)
         return TTSAudioResponse(
-            extension=AUDIO_FORMATS[self._format],
+            extension=self._format,
             data_gen=self._async_wrap(stream),
         )
 
@@ -264,4 +263,4 @@ class MurfTTSEntity(TextToSpeechEntity):
         """Return the complete audio (used for cached, non-streamed playback)."""
         stream = await self._async_open(message, language, options)
         audio = b"".join([chunk async for chunk in self._async_wrap(stream)])
-        return AUDIO_FORMATS[self._format], audio
+        return self._format, audio

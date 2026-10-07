@@ -115,16 +115,16 @@
     },
     "model": {
       "options": {
-        "FALCON": "Falcon (geringe Latenz)",
-        "GEN2": "Gen2 (höchste Qualität)"
+        "falcon": "Falcon (geringe Latenz)",
+        "gen2": "Gen2 (höchste Qualität)"
       }
     },
     "audio_format": {
       "options": {
-        "MP3": "MP3",
-        "OGG": "OGG",
-        "WAV": "WAV",
-        "FLAC": "FLAC"
+        "mp3": "MP3",
+        "ogg": "OGG",
+        "wav": "WAV",
+        "flac": "FLAC"
       }
     }
   },

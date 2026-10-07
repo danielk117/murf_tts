@@ -55,6 +55,8 @@ from .const import (
     RATE_MIN,
     REGIONS,
     SUBENTRY_TYPE_TTS,
+    normalize_audio_format,
+    normalize_model,
 )
 
 if TYPE_CHECKING:
@@ -218,6 +220,11 @@ class MurfVoiceSubentryFlow(ConfigSubentryFlow):
     ) -> SubentryFlowResult:
         """Change an existing voice."""
         self._data = dict(self._get_reconfigure_subentry().data)
+        # Entries created by 1.0.0 stored upper case values.
+        self._data[CONF_MODEL] = normalize_model(self._data.get(CONF_MODEL))
+        self._data[CONF_AUDIO_FORMAT] = normalize_audio_format(
+            self._data.get(CONF_AUDIO_FORMAT)
+        )
         return await self.async_step_language()
 
     # ---- helpers ------------------------------------------------------
@@ -433,7 +440,7 @@ class MurfVoiceSubentryFlow(ConfigSubentryFlow):
             )
         ] = SelectSelector(
             SelectSelectorConfig(
-                options=list(AUDIO_FORMATS),
+                options=AUDIO_FORMATS,
                 mode=SelectSelectorMode.DROPDOWN,
                 translation_key=CONF_AUDIO_FORMAT,
             )

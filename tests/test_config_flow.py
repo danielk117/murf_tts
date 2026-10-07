@@ -143,7 +143,7 @@ async def test_add_voice_subentry(
     assert locale_key.default() == "de-DE"
 
     result = await hass.config_entries.subentries.async_configure(
-        result["flow_id"], {CONF_LOCALE: "de-DE", CONF_MODEL: "FALCON"}
+        result["flow_id"], {CONF_LOCALE: "de-DE", CONF_MODEL: "falcon"}
     )
     assert result["step_id"] == "voice"
     voice_options = result["data_schema"].schema[CONF_VOICE_ID].config["options"]
@@ -161,19 +161,19 @@ async def test_add_voice_subentry(
             CONF_STYLE: "Calm",
             CONF_RATE: -10.0,
             CONF_PITCH: 0,
-            CONF_AUDIO_FORMAT: "MP3",
+            CONF_AUDIO_FORMAT: "mp3",
         },
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert result["title"] == "Lia ruhig"
     assert result["data"] == {
         CONF_LOCALE: "de-DE",
-        CONF_MODEL: "FALCON",
+        CONF_MODEL: "falcon",
         CONF_VOICE_ID: "de-DE-lia",
         CONF_STYLE: "Calm",
         CONF_RATE: -10,
         CONF_PITCH: 0,
-        CONF_AUDIO_FORMAT: "MP3",
+        CONF_AUDIO_FORMAT: "mp3",
     }
     await hass.async_block_till_done()
     assert hass.states.get("tts.lia_ruhig") is not None
@@ -189,6 +189,7 @@ async def test_language_without_voices_for_model(
     async def voices(model: str | None = None, **_: object) -> list:
         from .conftest import VOICES
 
+        # The SDK receives the model in upper case, as Murf expects it.
         return VOICES if model == "FALCON" else [VOICES[2]]
 
     murf_tts_api.get_voices.side_effect = voices
@@ -199,7 +200,7 @@ async def test_language_without_voices_for_model(
         (entry.entry_id, SUBENTRY_TYPE_TTS), context={"source": SOURCE_USER}
     )
     result = await hass.config_entries.subentries.async_configure(
-        result["flow_id"], {CONF_LOCALE: "de-DE", CONF_MODEL: "GEN2"}
+        result["flow_id"], {CONF_LOCALE: "de-DE", CONF_MODEL: "gen2"}
     )
     assert result["step_id"] == "language"
     assert result["errors"] == {"base": "no_voices_for_language"}
@@ -215,7 +216,7 @@ async def test_reconfigure_voice_subentry(
     result = await entry.start_subentry_reconfigure_flow(hass, subentry_id)
     assert result["step_id"] == "language"
     result = await hass.config_entries.subentries.async_configure(
-        result["flow_id"], {CONF_LOCALE: "de-DE", CONF_MODEL: "FALCON"}
+        result["flow_id"], {CONF_LOCALE: "de-DE", CONF_MODEL: "falcon"}
     )
     voice_key = next(k for k in result["data_schema"].schema if k == CONF_VOICE_ID)
     assert voice_key.default() == "de-DE-matthias"
@@ -229,11 +230,11 @@ async def test_reconfigure_voice_subentry(
             CONF_STYLE: "Promo",
             CONF_RATE: 0,
             CONF_PITCH: 0,
-            CONF_AUDIO_FORMAT: "OGG",
+            CONF_AUDIO_FORMAT: "ogg",
         },
     )
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "reconfigure_successful"
     data = entry.subentries[subentry_id].data
     assert data[CONF_STYLE] == "Promo"
-    assert data[CONF_AUDIO_FORMAT] == "OGG"
+    assert data[CONF_AUDIO_FORMAT] == "ogg"

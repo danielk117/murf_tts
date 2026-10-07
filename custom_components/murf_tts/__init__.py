@@ -8,7 +8,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 
 from .api import MurfApi, MurfAuthError, MurfError
-from .const import CONF_MODEL, CONF_REGION, DEFAULT_MODEL, DEFAULT_REGION, DOMAIN
+from .const import (
+    CONF_MODEL,
+    CONF_REGION,
+    DEFAULT_MODEL,
+    DEFAULT_REGION,
+    DOMAIN,
+    normalize_model,
+)
 
 PLATFORMS: list[Platform] = [Platform.TTS]
 
@@ -26,7 +33,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MurfConfigEntry) -> bool
     # Loading the voice catalogue validates the key and lets the entities
     # report languages and voices without a network call.
     models = {
-        subentry.data.get(CONF_MODEL, DEFAULT_MODEL)
+        normalize_model(subentry.data.get(CONF_MODEL))
         for subentry in entry.subentries.values()
     } or {DEFAULT_MODEL}
     try:

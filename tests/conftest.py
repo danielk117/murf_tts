@@ -130,13 +130,13 @@ def config_entry(hass: HomeAssistant) -> MockConfigEntry:
                 title="Matthias",
                 unique_id=None,
                 data={
-                    CONF_MODEL: "FALCON",
+                    CONF_MODEL: "falcon",
                     CONF_LOCALE: "de-DE",
                     CONF_VOICE_ID: "de-DE-matthias",
                     CONF_STYLE: "Conversational",
                     CONF_RATE: 5,
                     CONF_PITCH: -3,
-                    CONF_AUDIO_FORMAT: "MP3",
+                    CONF_AUDIO_FORMAT: "mp3",
                 },
             )
         ],

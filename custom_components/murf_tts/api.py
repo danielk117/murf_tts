@@ -17,7 +17,7 @@ from murf import AsyncMurf
 from murf.core.api_error import ApiError
 from murf.region import MurfRegion
 
-from .const import LOGGER
+from .const import LOGGER, normalize_audio_format, normalize_model
 
 # Murf uses a few locale codes that are not valid BCP 47 tags.
 _MURF_TO_HA_LOCALE = {"en-UK": "en-GB"}
@@ -157,10 +157,13 @@ class MurfApi:
         self, model: str, *, refresh: bool = False
     ) -> dict[str, MurfVoice]:
         """Return the voices for a model, keyed by voice id (cached)."""
+        model = normalize_model(model)
         if not refresh and model in self._voices:
             return self._voices[model]
         try:
-            raw_voices = await self._catalog.text_to_speech.get_voices(model=model)
+            raw_voices = await self._catalog.text_to_speech.get_voices(
+                model=model.upper()
+            )
         except Exception as err:
             raise translate_error(err) from err
         voices: dict[str, MurfVoice] = {}
@@ -173,7 +176,7 @@ class MurfApi:
 
     def cached_voices(self, model: str) -> dict[str, MurfVoice]:
         """Return the cached voices for a model without a network call."""
-        return self._voices.get(model, {})
+        return self._voices.get(normalize_model(model), {})
 
     async def async_open_stream(
         self,
@@ -204,8 +207,8 @@ class MurfApi:
         stream: AsyncIterator[bytes] = self._speech.text_to_speech.stream(
             text=text,
             voice_id=voice_id,
-            model=model,
-            format=audio_format,
+            model=normalize_model(model).upper(),
+            format=normalize_audio_format(audio_format).upper(),
             channel_type="MONO",
             **kwargs,
         )

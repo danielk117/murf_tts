@@ -228,3 +228,26 @@ async def test_end_to_end_through_tts_manager(
     assert extension == "mp3"
     assert data == b"".join(AUDIO)
     assert murf_tts_api.stream_calls[-1]["text"].strip() == "Willkommen zu Hause"
+
+
+async def test_legacy_upper_case_subentry(
+    hass: HomeAssistant,
+    config_entry: MockConfigEntry,
+    mock_murf: MagicMock,
+    murf_tts_api: FakeTextToSpeech,
+) -> None:
+    """Subentries stored by 1.0.0 (FALCON/MP3) keep working."""
+    subentry = next(iter(config_entry.subentries.values()))
+    hass.config_entries.async_update_subentry(
+        config_entry,
+        subentry,
+        data={**subentry.data, "model": "FALCON", "audio_format": "MP3"},
+    )
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    extension, _ = await _entity(hass).async_get_tts_audio("Hallo", "de-DE", {})
+    assert extension == "mp3"
+    call = murf_tts_api.stream_calls[-1]
+    assert (call["model"], call["format"]) == ("FALCON", "MP3")
+    assert murf_tts_api.get_voices.await_args.kwargs == {"model": "FALCON"}
