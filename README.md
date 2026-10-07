@@ -19,7 +19,7 @@ Each Murf voice you add becomes its own `tts.*` entity that can be used in `tts.
 ## Requirements
 
 - Home Assistant 2025.7 or newer
-- A Murf API key from the [Murf API dashboard](https://murf.ai/api/dashboard). A Murf Studio subscription alone does not include API access; the API is billed separately per character.
+- A Murf API key from the [Murf API dashboard](https://murf.ai/api/dashboard) (Free trail: No credit card required and $10 free, every month)
 
 ## Installation
 
@@ -78,15 +78,6 @@ data:
 - **Region:** the voice catalogue is only served from `api.murf.ai`; the region setting applies to speech synthesis. Murf limits concurrent requests per region (see the Murf docs), which can matter if several speakers announce at the same time.
 - **Caching:** Home Assistant caches generated audio by default (`cache: true`), so repeated messages do not use Murf characters again.
 - **Privacy:** the text you send is processed by Murf. Do not send personal data you would not want to leave your network.
-
-## Development
-
-```bash
-pip install -r requirements_test.txt mutagen ha-ffmpeg
-pytest
-```
-
-The tests replace the Murf SDK with a fake and run against a real Home Assistant core.
 
 ## License
 
