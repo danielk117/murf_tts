@@ -1,0 +1,14 @@
+{
+  "domain": "murf_tts",
+  "name": "Murf AI TTS",
+  "codeowners": ["@danielk117"],
+  "config_flow": true,
+  "dependencies": ["tts"],
+  "documentation": "https://github.com/danielk117/murf_tts",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/danielk117/murf_tts/issues",
+  "loggers": ["murf"],
+  "requirements": ["murf==2.3.0"],
+  "version": "1.0.0"
+}

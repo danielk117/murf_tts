@@ -1,0 +1,151 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Murf AI verbinden",
+        "description": "Gib deinen Murf-API-Key ein. Du kannst ihn im [Murf-API-Dashboard]({api_key_url}) erstellen.",
+        "data": {
+          "api_key": "API-Key",
+          "region": "Region"
+        },
+        "data_description": {
+          "api_key": "Key aus dem Murf-API-Dashboard (nicht dein Login-Passwort).",
+          "region": "Wo die Sprache erzeugt wird. „Global“ nutzt den nächstgelegenen Server; eine feste Region hält die Daten in dieser Region."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Murf-API-Key abgelehnt",
+        "description": "Murf akzeptiert den gespeicherten API-Key nicht mehr. Gib einen neuen Key aus dem [Murf-API-Dashboard]({api_key_url}) ein.",
+        "data": {
+          "api_key": "API-Key"
+        }
+      },
+      "reconfigure": {
+        "title": "Murf-Kontoeinstellungen ändern",
+        "description": "API-Key oder Region ändern. Keys verwaltest du im [Murf-API-Dashboard]({api_key_url}).",
+        "data": {
+          "api_key": "API-Key",
+          "region": "Region"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Murf hat den API-Key abgelehnt.",
+      "cannot_connect": "Murf ist nicht erreichbar. Prüfe die Netzwerkverbindung und versuche es erneut.",
+      "unknown": "Unerwarteter Fehler, Details stehen im Log."
+    },
+    "abort": {
+      "already_configured": "Dieser API-Key ist bereits eingerichtet.",
+      "reauth_successful": "Der API-Key wurde aktualisiert.",
+      "reconfigure_successful": "Die Einstellungen wurden aktualisiert."
+    }
+  },
+  "config_subentries": {
+    "tts": {
+      "entry_type": "Stimme",
+      "initiate_flow": {
+        "user": "Stimme hinzufügen",
+        "reconfigure": "Stimme ändern"
+      },
+      "step": {
+        "language": {
+          "title": "Sprache und Modell",
+          "description": "Wähle die Sprache, die die Stimme sprechen soll, und das Murf-Modell.",
+          "data": {
+            "locale": "Sprache",
+            "model": "Modell"
+          },
+          "data_description": {
+            "model": "Falcon ist schnell und für Echtzeit gedacht. Gen2 klingt am natürlichsten, hat aber mehr Latenz."
+          }
+        },
+        "voice": {
+          "title": "Stimme",
+          "description": "Stimmen, die {language} sprechen.",
+          "data": {
+            "voice_id": "Stimme"
+          }
+        },
+        "settings": {
+          "title": "Stimmeinstellungen",
+          "description": "Einstellungen für {voice} in {language}. Stil, Tempo und Tonhöhe lassen sich auch pro Aufruf überschreiben.",
+          "data": {
+            "name": "Name",
+            "style": "Stil",
+            "rate": "Tempo",
+            "pitch": "Tonhöhe",
+            "audio_format": "Audioformat"
+          },
+          "data_description": {
+            "name": "Name der TTS-Entität in Home Assistant.",
+            "rate": "-50 (langsam) bis 50 (schnell), 0 ist das normale Tempo der Stimme.",
+            "pitch": "-50 (tief) bis 50 (hoch), 0 ist die normale Tonhöhe der Stimme.",
+            "audio_format": "MP3 funktioniert mit fast jedem Media-Player."
+          }
+        }
+      },
+      "error": {
+        "no_voices_for_language": "Das gewählte Modell hat keine Stimme für diese Sprache. Wähle ein anderes Modell oder eine andere Sprache.",
+        "invalid_voice": "Wähle eine Stimme aus der Liste."
+      },
+      "abort": {
+        "entry_not_loaded": "Die Murf-Integration ist nicht geladen. Behebe zuerst das Problem mit dem Konto und füge dann Stimmen hinzu.",
+        "cannot_connect": "Die Stimmenliste konnte nicht von Murf geladen werden.",
+        "no_voices": "Murf hat keine Stimmen geliefert.",
+        "reconfigure_successful": "Die Stimme wurde aktualisiert."
+      }
+    }
+  },
+  "selector": {
+    "region": {
+      "options": {
+        "global": "Global (nächster Server)",
+        "eu-central": "EU (Zentral)",
+        "uk": "Vereinigtes Königreich",
+        "us-east": "USA Ost",
+        "us-west": "USA West",
+        "ca": "Kanada",
+        "sa-east": "Südamerika (São Paulo)",
+        "in": "Indien",
+        "jp": "Japan",
+        "kr": "Südkorea",
+        "au": "Australien",
+        "me": "VAE"
+      }
+    },
+    "model": {
+      "options": {
+        "FALCON": "Falcon (geringe Latenz)",
+        "GEN2": "Gen2 (höchste Qualität)"
+      }
+    },
+    "audio_format": {
+      "options": {
+        "MP3": "MP3",
+        "OGG": "OGG",
+        "WAV": "WAV",
+        "FLAC": "FLAC"
+      }
+    }
+  },
+  "exceptions": {
+    "invalid_auth": {
+      "message": "Murf hat den API-Key abgelehnt. Bitte die Integration neu authentifizieren."
+    },
+    "cannot_connect": {
+      "message": "Murf ist nicht erreichbar: {error}"
+    },
+    "quota_exceeded": {
+      "message": "Das Murf-Konto hat keine Zeichen mehr übrig oder der Tarif erlaubt diese Anfrage nicht: {error}"
+    },
+    "request_failed": {
+      "message": "Murf hat die Anfrage abgelehnt: {error}"
+    },
+    "unsupported_language": {
+      "message": "Die Stimme {voice} spricht kein {language}."
+    },
+    "invalid_number": {
+      "message": "Die Option {option} muss eine ganze Zahl zwischen {min} und {max} sein."
+    }
+  }
+}

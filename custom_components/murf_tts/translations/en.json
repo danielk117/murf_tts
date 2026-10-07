@@ -1,0 +1,151 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Murf AI",
+        "description": "Enter your Murf API key. You can create one in the [Murf API dashboard]({api_key_url}).",
+        "data": {
+          "api_key": "API key",
+          "region": "Region"
+        },
+        "data_description": {
+          "api_key": "Key from the Murf API dashboard (not your login password).",
+          "region": "Where speech is generated. 'Global' routes to the nearest server; a fixed region keeps the data in that region."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Murf API key rejected",
+        "description": "Murf no longer accepts the stored API key. Enter a new key from the [Murf API dashboard]({api_key_url}).",
+        "data": {
+          "api_key": "API key"
+        }
+      },
+      "reconfigure": {
+        "title": "Change Murf account settings",
+        "description": "Change the API key or the region. Keys are managed in the [Murf API dashboard]({api_key_url}).",
+        "data": {
+          "api_key": "API key",
+          "region": "Region"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Murf rejected the API key.",
+      "cannot_connect": "Murf could not be reached. Check the network connection and try again.",
+      "unknown": "Unexpected error, see the log for details."
+    },
+    "abort": {
+      "already_configured": "This API key is already configured.",
+      "reauth_successful": "The API key has been updated.",
+      "reconfigure_successful": "The settings have been updated."
+    }
+  },
+  "config_subentries": {
+    "tts": {
+      "entry_type": "Voice",
+      "initiate_flow": {
+        "user": "Add voice",
+        "reconfigure": "Change voice"
+      },
+      "step": {
+        "language": {
+          "title": "Language and model",
+          "description": "Choose the language the voice should speak and the Murf model.",
+          "data": {
+            "locale": "Language",
+            "model": "Model"
+          },
+          "data_description": {
+            "model": "Falcon is fast and made for real-time use. Gen2 has the most natural sound but more latency."
+          }
+        },
+        "voice": {
+          "title": "Voice",
+          "description": "Voices that speak {language}.",
+          "data": {
+            "voice_id": "Voice"
+          }
+        },
+        "settings": {
+          "title": "Voice settings",
+          "description": "Settings for {voice} in {language}. Style, speed and pitch can also be overridden per call.",
+          "data": {
+            "name": "Name",
+            "style": "Style",
+            "rate": "Speed",
+            "pitch": "Pitch",
+            "audio_format": "Audio format"
+          },
+          "data_description": {
+            "name": "Name of the TTS entity in Home Assistant.",
+            "rate": "-50 (slow) to 50 (fast), 0 is the voice's normal speed.",
+            "pitch": "-50 (low) to 50 (high), 0 is the voice's normal pitch.",
+            "audio_format": "MP3 works with nearly every media player."
+          }
+        }
+      },
+      "error": {
+        "no_voices_for_language": "The selected model has no voice for this language. Choose another model or language.",
+        "invalid_voice": "Choose a voice from the list."
+      },
+      "abort": {
+        "entry_not_loaded": "The Murf integration is not loaded. Fix the account first, then add voices.",
+        "cannot_connect": "The voice list could not be loaded from Murf.",
+        "no_voices": "Murf did not return any voices.",
+        "reconfigure_successful": "The voice has been updated."
+      }
+    }
+  },
+  "selector": {
+    "region": {
+      "options": {
+        "global": "Global (nearest server)",
+        "eu-central": "EU (Central)",
+        "uk": "United Kingdom",
+        "us-east": "US East",
+        "us-west": "US West",
+        "ca": "Canada",
+        "sa-east": "South America (São Paulo)",
+        "in": "India",
+        "jp": "Japan",
+        "kr": "South Korea",
+        "au": "Australia",
+        "me": "UAE"
+      }
+    },
+    "model": {
+      "options": {
+        "FALCON": "Falcon (low latency)",
+        "GEN2": "Gen2 (highest quality)"
+      }
+    },
+    "audio_format": {
+      "options": {
+        "MP3": "MP3",
+        "OGG": "OGG",
+        "WAV": "WAV",
+        "FLAC": "FLAC"
+      }
+    }
+  },
+  "exceptions": {
+    "invalid_auth": {
+      "message": "Murf rejected the API key. Re-authenticate the integration."
+    },
+    "cannot_connect": {
+      "message": "Murf could not be reached: {error}"
+    },
+    "quota_exceeded": {
+      "message": "The Murf account has no characters left or the plan does not allow this request: {error}"
+    },
+    "request_failed": {
+      "message": "Murf rejected the request: {error}"
+    },
+    "unsupported_language": {
+      "message": "Voice {voice} does not speak {language}."
+    },
+    "invalid_number": {
+      "message": "Option {option} must be a whole number between {min} and {max}."
+    }
+  }
+}
